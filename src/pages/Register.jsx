@@ -1,43 +1,38 @@
 
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { TextField, Button } from '@mui/material'
-
 import {UserDb} from "../databases/UserDb"
 
-const Register = () => {
 
+const Register = () => {
 const [userData, setUserData] = useState({
     name: '',
     email: '',
-    password: 'ffff'
+    password: ''
 })
 
-const getUserData = (e)=> {
-
-    
-     Object.keys(userData).forEach((item)=>{
-        if(e.target.getAttribute("name") == userData[item]){
-     setUserData(userData["name"] = e.target.value)
- }
- console.log(userData.name, e.target.getAttribute("name") )
-})     
+const getUserData = (e)=> { 
+    setUserData(prev => ({...prev, [e.target.name]: e.target.value}))
+     
+ 
         
-console.log(userData['password'])
+
   
 }
 
     const registerFunc = ()=> {
-
+console.log(userData)
         const user = {
             id:  Date.now(),
-            name: "",
-            email: "",
-            password: ""
+            name: userData.name,
+            email: userData.email,
+            password: userData.password
         }
 
         UserDb.push(user)
         console.log(UserDb)
+       
 
     }
 
@@ -52,7 +47,7 @@ console.log(userData['password'])
   <TextField onChange={getUserData} variant="outlined" label="Username" name='name' />
   <TextField onChange={getUserData} variant="outlined" label="Email" type="email" name ='email'/>
   <TextField onChange={getUserData} variant="outlined" label="Password" type="password" name='password'/>
-  <Button variant="contained">Sign Up</Button>
+  <Button onClick={registerFunc} disabled = {userData.name.length<3 || userData.email.length < 5 ||(userData.password.length < 8)||(userData.password.search(/[a-z]/) < 0)||(userData.password.search(/[A-Z]/)< 0)||(userData.password.search(/[0-9]/) < 0)||(userData.password.search(" ") > -1)} variant="contained">Sign Up</Button>
 
             </div>
         </div>
@@ -63,3 +58,5 @@ console.log(userData['password'])
 
 
 export {Register}
+
+
